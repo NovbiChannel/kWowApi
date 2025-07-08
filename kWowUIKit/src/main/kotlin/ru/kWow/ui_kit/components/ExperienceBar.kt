@@ -9,6 +9,11 @@ import ru.kWow.widgets.script.ScriptType
 import ru.kWow.widgets.text.TextTemplate
 import ru.kWow.widgets.ui.*
 
+/**
+ * Experience Bar
+ *
+ * @see <img src="https://raw.githubusercontent.com/NovbiChannel/kWowApi/refs/heads/main/kWowUIKit/src/main/resources/screenshots/experience_bar.png">
+ */
 fun ExperienceBar(): String {
     UIParent.createFrame(type = FrameType.Frame, name = "expBar") {
         setSize(325, 25)
