@@ -1,0 +1,13 @@
+package ru.kWow.common.utils
+
+enum class Events {
+    PLAYER_XP_UPDATE,
+    PLAYER_LEVEL_UP,
+    PLAYER_LOGIN,
+    UPDATE_EXHAUSTION,
+    UNIT_HEALTH,
+    UNIT_POWER,
+    UNIT_MAXPOWER,
+    UNIT_DISPLAYPOWER,
+    PLAYER_REGEN_ENABLED
+}
