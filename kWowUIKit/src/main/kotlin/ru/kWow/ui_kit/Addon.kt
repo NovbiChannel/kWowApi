@@ -1,8 +1,8 @@
 package ru.kWow.ui_kit
 
-import ru.kWow.common.utils.AddonConfig
-import ru.kWow.common.utils.AddonCreator
-import ru.kWow.common.utils.Patch
+import ru.kWow.addon.AddonConfig
+import ru.kWow.addon.AddonCreator
+import ru.kWow.addon.Patch
 import ru.kWow.ui_kit.components.ExperienceBar
 
 private val config = AddonConfig(

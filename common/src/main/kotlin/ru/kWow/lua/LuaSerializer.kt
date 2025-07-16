@@ -1,4 +1,4 @@
-package ru.kWow.common.utils
+package ru.kWow.lua
 
 import kotlin.reflect.full.declaredMemberProperties
 

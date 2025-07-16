@@ -1,4 +1,4 @@
-package ru.kWow.common.utils
+package ru.kWow.lua
 
 class ScriptHandlerBuilder {
     private val luaCode = StringBuilder()
@@ -42,7 +42,7 @@ class ScriptContext {
     }
 
     fun print(message: String) {
-        statements.add("print(${message.toLuaString()})")
+        statements.add("print(${message.toLua()})")
     }
 
     fun build(): String = statements.joinToString("\n")

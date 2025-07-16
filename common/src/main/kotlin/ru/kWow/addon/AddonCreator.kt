@@ -1,4 +1,4 @@
-package ru.kWow.common.utils
+package ru.kWow.addon
 
 import java.io.File
 

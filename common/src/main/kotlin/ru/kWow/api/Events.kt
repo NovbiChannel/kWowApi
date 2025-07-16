@@ -1,4 +1,4 @@
-package ru.kWow.common.utils
+package ru.kWow.api
 
 enum class Events {
     PLAYER_XP_UPDATE,

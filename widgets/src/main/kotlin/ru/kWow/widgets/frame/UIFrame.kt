@@ -1,18 +1,15 @@
 package ru.kWow.widgets.frame
 
-import ru.kWow.common.utils.Events
-import ru.kWow.common.utils.LuaSerializer
-import ru.kWow.common.utils.ScriptHandlerBuilder
-import ru.kWow.common.utils.WowApiStringifier
-import ru.kWow.common.utils.toLuaString
-import ru.kWow.widgets.script.ScriptType
+import ru.kWow.api.Events
+import ru.kWow.api.WowApiStringifier
+import ru.kWow.api.types.ScriptType
+import ru.kWow.lua.LuaSerializer
+import ru.kWow.lua.ScriptHandlerBuilder
+import ru.kWow.lua.toLua
 import ru.kWow.widgets.text.Text
 import ru.kWow.widgets.text.TextTemplate
 import ru.kWow.widgets.text.UiText
-import ru.kWow.widgets.ui.Alignment
-import ru.kWow.widgets.ui.Backdrop
-import ru.kWow.widgets.ui.DrawLayer
-import ru.kWow.widgets.ui.FrameType
+import ru.kWow.widgets.ui.*
 
 open class UIFrame(
     override val name: String
@@ -25,8 +22,8 @@ open class UIFrame(
         init: Frame.() -> Unit
     ): String {
         val params = mutableListOf<String>()
-        params.add(type.name.toLuaString())
-        params.add(name.toLuaString())
+        params.add(type.name.toLua())
+        params.add(name.toLua())
         params.add(this.name)
 
         val frame = UIFrame(name)
@@ -49,12 +46,12 @@ open class UIFrame(
     }
 
     override fun setScript(scriptType: ScriptType, handler: ScriptHandlerBuilder.() -> String) {
-        scripts.add(WowApiStringifier.Frame.SetScript(name, scriptType.name, handler(ScriptHandlerBuilder())))
+        scripts.add(WowApiStringifier.Frame.SetScript(name, scriptType.luaValue, handler(ScriptHandlerBuilder())))
     }
 
     override fun setPoint(alignment: Alignment, x: Int?, y: Int?) {
         val params = mutableListOf<String>()
-        params.add(alignment.name.toLuaString())
+        params.add(alignment.name.toLua())
         x?.let { params.add(it.toString()) }
         y?.let { params.add(it.toString()) }
 
@@ -70,20 +67,23 @@ open class UIFrame(
         components.add(WowApiStringifier.Frame.SetBackdrop(name, backdropTable))
     }
 
-    override fun setBackdropColor(hexColor: String, alpha: Float) {
-        components.add(WowApiStringifier.Frame.SetBackdropColor(name, hexColor, alpha))
+    override fun setBackdropColor(color: Color) {
+        val normalized = color.toNormalizedList()
+        components.add(WowApiStringifier.Frame.SetBackdropColor(name, normalized))
     }
 
-    override fun setBackdropBorderColor(hexColor: String, alpha: Float) {
-        components.add(WowApiStringifier.Frame.SetBackdropBorderColor(name, hexColor, alpha))
+    override fun setBackdropBorderColor(color: Color) {
+        val normalized = color.toNormalizedList()
+        components.add(WowApiStringifier.Frame.SetBackdropBorderColor(name, normalized))
     }
 
     override fun setStatusBarTexture(path: String) {
         components.add(WowApiStringifier.StatusBar.SetStatusBarTexture(name, listOf(path)))
     }
 
-    override fun setStatusBarColor(hexColor: String, alpha: Float) {
-        components.add(WowApiStringifier.StatusBar.SetStatusBarColor(name, hexColor, alpha))
+    override fun setStatusBarColor(color: Color) {
+        val normalized = color.toNormalizedList()
+        components.add(WowApiStringifier.StatusBar.SetStatusBarColor(name, normalized))
     }
 
     override fun setMinMaxValue(min: Int, max: Int) {
