@@ -1,5 +1,6 @@
 package ru.kWow.widgets
 
+import ru.kWow.lua.LuaContext
 import ru.kWow.widgets.frame.UIFrame
 
-object UIParent: UIFrame("UIParent")
+class UIParent(context: LuaContext): UIFrame("UIParent", context)

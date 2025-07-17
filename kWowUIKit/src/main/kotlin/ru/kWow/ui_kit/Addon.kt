@@ -3,6 +3,8 @@ package ru.kWow.ui_kit
 import ru.kWow.addon.AddonConfig
 import ru.kWow.addon.AddonCreator
 import ru.kWow.addon.Patch
+import ru.kWow.lua.context.GlobalLuaContext
+import ru.kWow.lua.context.fileBuilder
 import ru.kWow.ui_kit.components.ExperienceBar
 
 private val config = AddonConfig(
@@ -11,11 +13,13 @@ private val config = AddonConfig(
     notes = "This addon is generated using the kWow library.",
     author = "Novbi",
     version = "1.0",
-    outputPath = "D:\\Games\\sirus\\World of Warcraft Sirus\\Interface\\AddOns\\"
+    outputPath = "D:\\Games\\"
 )
 
 fun main() {
     AddonCreator.create(config, listOf(
-        "ExperienceBar" to ExperienceBar()
+        GlobalLuaContext().fileBuilder("ExperienceBar") { ctx ->
+            ExperienceBar(ctx)
+        }
     ))
 }

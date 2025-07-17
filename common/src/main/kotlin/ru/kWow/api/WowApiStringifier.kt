@@ -126,8 +126,8 @@ object WowApiStringifier {
         fun SetMinMaxValues(parent: String, min: Int, max: Int): String {
             return "SetMinMaxValues".generateCall(parent, listOf(min.toString(), max.toString()))
         }
-        fun SetValue(parent: String, value: Double): String {
-            return "SetValue".generateCall(parent, listOf(value.toString()))
+        fun SetValue(parent: String, value: String): String {
+            return "SetValue".generateCall(parent, listOf(value))
         }
     }
 

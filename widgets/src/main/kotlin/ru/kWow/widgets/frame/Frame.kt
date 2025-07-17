@@ -1,20 +1,17 @@
 package ru.kWow.widgets.frame
 
 import ru.kWow.api.Events
-import ru.kWow.lua.ScriptHandlerBuilder
 import ru.kWow.api.types.ScriptType
-import ru.kWow.widgets.ui.Color
+import ru.kWow.lua.ScriptHandlerBuilder
 import ru.kWow.widgets.text.Text
 import ru.kWow.widgets.text.TextTemplate
-import ru.kWow.widgets.ui.Alignment
-import ru.kWow.widgets.ui.Backdrop
-import ru.kWow.widgets.ui.DrawLayer
-import ru.kWow.widgets.ui.FrameType
+import ru.kWow.widgets.ui.*
 
 interface Frame {
     val name: String
-    fun createFrame(type: FrameType, name: String, init: Frame.() -> Unit): String
-    fun text(name: String, drawLayer: DrawLayer, template: TextTemplate, init: Text.() -> Unit): String
+
+    fun createFrame(type: FrameType, name: String, init: Frame.() -> Unit): Frame
+    fun text(name: String, drawLayer: DrawLayer, template: TextTemplate, init: Text.() -> Unit): Text
 
     fun setScript(scriptType: ScriptType, handler: ScriptHandlerBuilder.() -> String)
     fun setPoint(alignment: Alignment, x: Int? = null, y: Int? = null)
@@ -25,6 +22,7 @@ interface Frame {
     fun setStatusBarTexture(path: String)
     fun setStatusBarColor(color: Color)
     fun setMinMaxValue(min: Int = 0, max: Int = 1)
+    fun setValue(value: String)
 
     fun registerEvent(event: Events)
 }

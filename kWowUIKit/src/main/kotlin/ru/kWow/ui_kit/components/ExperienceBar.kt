@@ -1,13 +1,14 @@
 package ru.kWow.ui_kit.components
 
+import ru.kWow.api.Events
+import ru.kWow.api.WowApiStringifier
 import ru.kWow.api.types.ScriptType
 import ru.kWow.api.types.UnitId
-import ru.kWow.widgets.ui.Color
-import ru.kWow.api.Events
+import ru.kWow.lua.LuaContext
 import ru.kWow.lua.LuaStringifier
-import ru.kWow.api.WowApiStringifier
 import ru.kWow.lua.toLua
 import ru.kWow.widgets.UIParent
+import ru.kWow.widgets.frame.Frame
 import ru.kWow.widgets.text.TextTemplate
 import ru.kWow.widgets.ui.*
 
@@ -16,10 +17,12 @@ import ru.kWow.widgets.ui.*
  *
  * @see <img src="https://raw.githubusercontent.com/NovbiChannel/kWowApi/refs/heads/main/kWowUIKit/src/main/resources/screenshots/experience_bar.png">
  */
-fun ExperienceBar(): String {
-    UIParent.createFrame(type = FrameType.Frame, name = "expBar") {
+private lateinit var statusBar: Frame
+
+fun ExperienceBar(context: LuaContext): String {
+    UIParent(context).createFrame(type = FrameType.Frame, name = "expBar") {
         setSize(325, 25)
-        setPoint(Alignment.BOTTOM, 0, 5)
+        setPoint(Alignment.BOTTOM,0, 5)
 
         val playerLvl = text(name = "playerLvl", DrawLayer.ARTWORK, TextTemplate.GameFontNormalLarge) {
             setPoint(Alignment.LEFT)
@@ -36,7 +39,6 @@ fun ExperienceBar(): String {
             setText("0/0 %%0%".toLua())
         }
 
-        var statusBar = ""
         createFrame(FrameType.Frame, "progressBarContainer") {
             setPoint(Alignment.BOTTOMRIGHT)
             setSize(300, 10)
@@ -58,7 +60,7 @@ fun ExperienceBar(): String {
                 setPoint(Alignment.CENTER)
                 setSize(296, 6)
 
-                setStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar".toLua())
+                setStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
                 setStatusBarColor(Color.fromHex("#40888F"))
                 setMinMaxValue()
             }
@@ -75,12 +77,12 @@ fun ExperienceBar(): String {
                 val percent = setVariable("percent", LuaStringifier.Math.floor("($currentXP / $maxXP) * 100"))
                 val expValue = setVariable("expValue", "$currentXP / $maxXP")
 
-                statusBar.callExtension("SetValue", expValue)
-                playerLvl.callExtension("SetText", WowApiStringifier.Unit.UnitLevel(UnitId.PLAYER))
-                unitExpInfo.callExtension("SetText", """"..$currentXP.."/"..$maxXP.." "..$percent.."%""".toLua())
+                statusBar.setValue(expValue)
+                playerLvl.setText(WowApiStringifier.Unit.UnitLevel(UnitId.PLAYER))
+                unitExpInfo.setText(""""..$currentXP.."/"..$maxXP.." "..$percent.."%""".toLua())
             }
-            build()
         }
     }
-    return UIParent.buildComponent()
+
+    return context.build()
 }

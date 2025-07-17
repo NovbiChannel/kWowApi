@@ -1,49 +1,40 @@
 package ru.kWow.lua
 
-class ScriptHandlerBuilder {
-    private val luaCode = StringBuilder()
+class ScriptHandlerBuilder(private val context: LuaContext) {
+    private val buffer = StringBuilder()
 
-    fun function(vararg params: String, block: ScriptContext.() -> Unit) {
+    fun function(vararg params: String, block: ScriptContext.() -> Unit): String {
         val args = mutableListOf<String>()
         params.forEach { args.add(it) }
-        luaCode.append("function(${args.joinToString(", ")})\n")
-        val context = ScriptContext().apply(block)
-        luaCode.append(context.build())
-        luaCode.append("\nend")
+        buffer.append("function(${args.joinToString(", ")})\n")
+        val sc = ScriptContext(context).apply(block)
+        buffer.append(sc.build())
+        buffer.append("\nend")
+        return buffer.toString()
     }
-
-    fun build(): String = luaCode.toString()
 }
 
-class ScriptContext {
-    private val statements = mutableListOf<String>()
-
+class ScriptContext(private val luaContext: LuaContext) {
     fun setVariable(name: String, value: String): String {
-        statements.add("local $name = $value")
+        luaContext.append("local $name = $value")
         return name
     }
 
-    fun ifThen(condition: String, block: ScriptContext.() -> Unit) {
+/*    fun ifThen(condition: String, block: ScriptContext.() -> Unit) {
         statements.add("if $condition then")
         val innerContext = ScriptContext().apply(block)
         statements.addAll(innerContext.statements.map { "    $it" })
         statements.add("end")
-    }
+    }*/
 
     fun call(method: String, vararg args: String) {
-        statements.add("$method(${args.joinToString(", ")})")
-    }
-
-    fun String.callExtension(method: String, vararg args: Any) {
-        val listArgs = mutableListOf<String>()
-        args.forEach { listArgs.add(it.toString()) }
-
-        statements.add("$this:$method(${listArgs.joinToString(", ")})")
+        luaContext.append("$method(${args.joinToString(", ")})")
     }
 
     fun print(message: String) {
-        statements.add("print(${message.toLua()})")
+        luaContext.append("print(${message.toLua()})")
     }
-
-    fun build(): String = statements.joinToString("\n")
+    fun build(): String {
+        return luaContext.build()
+    }
 }
